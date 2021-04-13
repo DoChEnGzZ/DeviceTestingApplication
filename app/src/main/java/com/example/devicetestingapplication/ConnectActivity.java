@@ -40,8 +40,10 @@ public class ConnectActivity extends AppCompatActivity {
         initViews();
         myapplication=(myApplication)getApplication();
         myDataBase=myapplication.getMyDataBase();
+        tftpUtils=myapplication.getTftpUtils();
+        talnetUtils=myapplication.getTalnetUtils();
         logIninfEntity=myDataBase.userDao().queryLogIninf();
-        Log.d("log:sql test",logIninfEntity.toString());
+//        Log.d("log:sql test",logIninfEntity.toString());
         if(logIninfEntity.getIpaddr().length()!=0)
         {
             editText_username.setText(logIninfEntity.getUsername());
@@ -59,7 +61,7 @@ public class ConnectActivity extends AppCompatActivity {
                 }
                 else {
                     logIninfEntity.setIpaddr(editText_ipaddr.getText().toString());
-                    Log.d("登陆信息测试",editText_ipaddr.getText().toString());
+//                    Log.d("登陆信息测试",editText_ipaddr.getText().toString());
                     logIninfEntity.setPasswd(editText_passwd.getText().toString());
                     logIninfEntity.setUsername(editText_username.getText().toString());
                     tftpUtils=new TFTPUtils(ConnectActivity.this, logIninfEntity);
@@ -68,10 +70,9 @@ public class ConnectActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             tftpUtils.open();
-                            isConnected=tftpUtils.isConnected();
                             talnetUtils.connect();
-                            isConnected=talnetUtils.isConnected();
-                            Log.d("connect test","thread running normally");
+                            isConnected=tftpUtils.isConnected()&&talnetUtils.isConnected();
+//                            Log.d("connect test","thread running normally");
                         }
                     }).start();
                     if(isConnected)
@@ -87,10 +88,13 @@ public class ConnectActivity extends AppCompatActivity {
                             myDataBase.userDao().insertLogIninf(logIninfEntity);
                             Log.d("sql test",myDataBase.userDao().queryLogIninf().toString());
                         }
-                         Bundle bundle=new Bundle();
-                         bundle.putSerializable("tftp",tftpUtils);
-                         bundle.putSerializable("talnet",talnetUtils);
-                         intent2Menu.putExtras(bundle);
+                        /**
+                         * todo: 测试是使用application传递连接类还是用bundle
+                         */
+//                         Bundle bundle=new Bundle();
+//                         bundle.putSerializable("tftp",tftpUtils);
+//                         bundle.putSerializable("talnet",talnetUtils);
+//                         intent2Menu.putExtras(bundle);
                          startActivity(intent2Menu);
                     }
                     else{

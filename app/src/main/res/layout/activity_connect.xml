@@ -22,71 +22,62 @@
         android:id="@+id/editText_passwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="请输入密码"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_username" />
 
     <EditText
         android:id="@+id/editText_ipaddr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="ip地址"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connect_title1" />
 
     <EditText
         android:id="@+id/editText_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="用户名"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_ipaddr" />
 
     <CheckBox
         android:id="@+id/checkBox_remCon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
         android:layout_marginTop="72dp"
         android:text="记住这个登陆信息"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editText_passwd"
         app:layout_constraintTop_toBottomOf="@+id/editText_passwd" />
 
     <Button
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="64dp"
         android:text="确定"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_remCon"
         app:layout_constraintTop_toBottomOf="@+id/checkBox_remCon" />
 
     <Button
         android:id="@+id/button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="46dp"
-        android:layout_marginLeft="46dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="64dp"
         android:text="取消"
-        app:layout_constraintStart_toEndOf="@+id/button_yes"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_remCon"
         app:layout_constraintTop_toBottomOf="@+id/checkBox_remCon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
