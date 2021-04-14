@@ -36,7 +36,7 @@ public class ConnectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
-        final Intent intent2Menu=new Intent(this,MenuActivity.class);
+        final Intent intent2Menu=new Intent(this,MainActivity.class);
         initViews();
         myapplication=(myApplication)getApplication();
         myDataBase=myapplication.getMyDataBase();
