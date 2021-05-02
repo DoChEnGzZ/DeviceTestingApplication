@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetAddrActivity">
+
+    <TextView
+        android:id="@+id/setaddr_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="输入要设置的接口地址"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="10pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_eth0_ipaddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="接口eth0的ip地址"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setaddr_title1" />
+
+    <EditText
+        android:id="@+id/editText_eth1_ipaddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="接口eth1的ip地址"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_eth0_ipaddr" />
+
+    <EditText
+        android:id="@+id/editText_eth0_mac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="接口eth0的mac地址"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_eth1_ipaddr" />
+
+
+    <EditText
+        android:id="@+id/editText_eth1_mac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="接口eth1的mac地址"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_eth0_mac" />
+
+    <CheckBox
+        android:id="@+id/checkBox_remaddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="记住这个信息"
+        app:layout_constraintStart_toStartOf="@+id/editText_eth1_mac"
+        app:layout_constraintTop_toBottomOf="@+id/editText_eth1_mac" />
+
+    <Button
+        android:id="@+id/button_yes_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="确定"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_remaddr"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_remaddr" />
+
+    <Button
+        android:id="@+id/button_cancel_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="取消"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_remaddr"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_remaddr" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

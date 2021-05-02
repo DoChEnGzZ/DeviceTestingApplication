@@ -22,26 +22,22 @@ public class ConnectActivity extends AppCompatActivity {
     private CheckBox remCon;
     private Toast toast;
     private TFTPUtils tftpUtils;
-    private TalnetUtils talnetUtils;
+    private TelnetUtils telnetUtils;
     private myApplication myapplication=null;
     private myDataBase myDataBase;
-
-    /**
-     * 记录是否已经完成连接
-     */
-    private boolean isConnected=false;
+    private Intent intentConnect2Menu;
 
     public LogIninfEntity logIninfEntity =new LogIninfEntity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
-        final Intent intent2Menu=new Intent(this,MainActivity.class);
         initViews();
+        intentConnect2Menu=new Intent(this,MenuActivity.class);
         myapplication=(myApplication)getApplication();
         myDataBase=myapplication.getMyDataBase();
         tftpUtils=myapplication.getTftpUtils();
-        talnetUtils=myapplication.getTalnetUtils();
+        telnetUtils =myapplication.getTelnetUtils();
         logIninfEntity=myDataBase.userDao().queryLogIninf();
 //        Log.d("log:sql test",logIninfEntity.toString());
         if(logIninfEntity.getIpaddr().length()!=0)
@@ -65,17 +61,17 @@ public class ConnectActivity extends AppCompatActivity {
                     logIninfEntity.setPasswd(editText_passwd.getText().toString());
                     logIninfEntity.setUsername(editText_username.getText().toString());
                     tftpUtils=new TFTPUtils(ConnectActivity.this, logIninfEntity);
-                    talnetUtils=new TalnetUtils(ConnectActivity.this, logIninfEntity);
+                    telnetUtils =new TelnetUtils(ConnectActivity.this, logIninfEntity);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             tftpUtils.open();
-                            talnetUtils.connect();
-                            isConnected=tftpUtils.isConnected()&&talnetUtils.isConnected();
+                            telnetUtils.connect();
+                            myapplication.setConnected(tftpUtils.isConnected()&& telnetUtils.isConnected());
 //                            Log.d("connect test","thread running normally");
                         }
                     }).start();
-                    if(isConnected)
+                    if(myapplication.isConnected())
                     {
                         /**
                          * 连接成功，将tftp和talnet通过intent传递给下一个activity
@@ -93,9 +89,11 @@ public class ConnectActivity extends AppCompatActivity {
                          */
 //                         Bundle bundle=new Bundle();
 //                         bundle.putSerializable("tftp",tftpUtils);
-//                         bundle.putSerializable("talnet",talnetUtils);
+//                         bundle.putSerializable("talnet",telnetUtils);
 //                         intent2Menu.putExtras(bundle);
-                         startActivity(intent2Menu);
+//                        telnetUtils.sendCommand("cd /u");
+//                        Log.d("talnet test", telnetUtils.sendCommand("ls -l"));
+//                         startActivity(intent2Menu);
                     }
                     else{
                         toast.makeText(ConnectActivity.this,"连接失败",Toast.LENGTH_SHORT)
@@ -110,7 +108,7 @@ public class ConnectActivity extends AppCompatActivity {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.exit(0);
+                startActivity(intentConnect2Menu);
             }
         });
 

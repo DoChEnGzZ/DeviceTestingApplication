@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 
-public class TalnetUtils implements Serializable {
+public class TelnetUtils implements Serializable {
 
     private  TelnetClient client;
     private LogIninfEntity logIninfEntity;
@@ -26,7 +26,7 @@ public class TalnetUtils implements Serializable {
      * @param context 上下文环境
      * @param logIninfEntity 登陆信息
      */
-    public TalnetUtils(Context context, LogIninfEntity logIninfEntity) {
+    public TelnetUtils(Context context, LogIninfEntity logIninfEntity) {
         this.context=context;
         this.logIninfEntity = logIninfEntity;
         client=new TelnetClient();

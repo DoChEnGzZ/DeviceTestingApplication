@@ -17,15 +17,19 @@ public interface UserDao {
     void insertLogIninf(LogIninfEntity logIninfEntity);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insetAddress(AddressEntity addressEntity);
+    void insertAddress(AddressEntity addressEntity);
 
     @Query("delete from LogIninf")
     void deleteLogIninf();
+
+    @Query("delete from Address")
+    void deleteAddress();
 
     @Query("select * from LogIninf")
     LogIninfEntity queryLogIninf();
 
     @Query("select * from Address")
     List<AddressEntity> queryAddress();
+
 
 }

@@ -1,8 +1,6 @@
 package com.example.devicetestingapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import org.apache.commons.net.tftp.TFTPClient;
-import org.apache.commons.net.telnet.TelnetClient;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn_2connect;
     private Intent intent;
 
 
@@ -24,14 +21,15 @@ public class MainActivity extends AppCompatActivity {
         * 1. 上一次修改的ip地址、mac地址
         * 2. 上一次读取的本地文件目录地址
         * */
-        intent=new Intent(this,ConnectActivity.class);
+        intent=new Intent(this, MenuActivity.class);
         initviews();
-        btn_2connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(intent);
-            }
-        });
+        startActivity(intent);
+//        btn_2connect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
@@ -40,6 +38,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initviews(){
-        this.btn_2connect=f(R.id.button_2connect);
     }
 }
