@@ -1,14 +1,18 @@
 package com.example.devicetestingapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -28,8 +32,11 @@ public class StatusFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private TelnetUtils telnetUtils;
+    private Toast toast;
     private OnFragmentInteractionListener mListener;
+    private myApplication myapplication;
+    private Intent intent;
 
     public StatusFragment() {
         // Required empty public constructor
@@ -60,13 +67,29 @@ public class StatusFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        myapplication=(myApplication)getActivity().getApplication();
+        telnetUtils=myapplication.getTelnetUtils();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_status, container, false);
+        View view= inflater.inflate(R.layout.fragment_status, container, false);
+        if(!myapplication.isConnected())
+        {
+            toast.makeText(getContext(),"请先建立连接",Toast.LENGTH_LONG);
+            Intent intent=new Intent(getActivity(),ConnectActivity.class);
+            startActivity(intent);
+        }
+        telnetUtils.UpdateStatus();
+        Status status=telnetUtils.getStatus();
+        RecyclerView recyclerView=view.findViewById(R.id.recyclerview_status);
+        LinearLayoutManager manager=new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+        StatusAdapter adapter=new StatusAdapter(status);
+        recyclerView.setAdapter(adapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -21,7 +21,6 @@ public class ConnectActivity extends AppCompatActivity {
     private Button button_cancel;
     private CheckBox remCon;
     private Toast toast;
-    private TFTPUtils tftpUtils;
     private TelnetUtils telnetUtils;
     private myApplication myapplication=null;
     private myDataBase myDataBase;
@@ -36,8 +35,6 @@ public class ConnectActivity extends AppCompatActivity {
         intentConnect2Menu=new Intent(this,MenuActivity.class);
         myapplication=(myApplication)getApplication();
         myDataBase=myapplication.getMyDataBase();
-        tftpUtils=myapplication.getTftpUtils();
-        telnetUtils =myapplication.getTelnetUtils();
         logIninfEntity=myDataBase.userDao().queryLogIninf();
 //        Log.d("log:sql test",logIninfEntity.toString());
         if(logIninfEntity.getIpaddr().length()!=0)
@@ -49,9 +46,8 @@ public class ConnectActivity extends AppCompatActivity {
         button_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(editText_ipaddr.getText())||
-                TextUtils.isEmpty(editText_username.getText())||
-                TextUtils.isEmpty(editText_passwd.getText())){
+                if(TextUtils.isEmpty(editText_ipaddr.getText())|| TextUtils.isEmpty(editText_username.getText())
+                ){
                     toast.makeText(ConnectActivity.this,"输入为空",Toast.LENGTH_SHORT)
                             .show();
                 }
@@ -60,17 +56,21 @@ public class ConnectActivity extends AppCompatActivity {
 //                    Log.d("登陆信息测试",editText_ipaddr.getText().toString());
                     logIninfEntity.setPasswd(editText_passwd.getText().toString());
                     logIninfEntity.setUsername(editText_username.getText().toString());
-                    tftpUtils=new TFTPUtils(ConnectActivity.this, logIninfEntity);
+//                    tftpUtils=new TFTPUtils(ConnectActivity.this, logIninfEntity);
                     telnetUtils =new TelnetUtils(ConnectActivity.this, logIninfEntity);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tftpUtils.open();
-                            telnetUtils.connect();
-                            myapplication.setConnected(tftpUtils.isConnected()&& telnetUtils.isConnected());
-//                            Log.d("connect test","thread running normally");
-                        }
-                    }).start();
+                    final Thread telnetconnect=new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                telnetUtils.connect();
+                                myapplication.setConnected(telnetUtils.isConnected());
+                            }
+                    });
+                    telnetconnect.start();
+                    try {
+                        telnetconnect.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     if(myapplication.isConnected())
                     {
                         /**
@@ -78,22 +78,14 @@ public class ConnectActivity extends AppCompatActivity {
                          */
                         toast.makeText(ConnectActivity.this,"登陆成功",Toast.LENGTH_SHORT).
                                 show();
+                        myapplication.setTelnetUtils(telnetUtils);
                         if(remCon.isChecked())
                         {
                             myDataBase.userDao().deleteLogIninf();
                             myDataBase.userDao().insertLogIninf(logIninfEntity);
                             Log.d("sql test",myDataBase.userDao().queryLogIninf().toString());
                         }
-                        /**
-                         * todo: 测试是使用application传递连接类还是用bundle
-                         */
-//                         Bundle bundle=new Bundle();
-//                         bundle.putSerializable("tftp",tftpUtils);
-//                         bundle.putSerializable("talnet",telnetUtils);
-//                         intent2Menu.putExtras(bundle);
-//                        telnetUtils.sendCommand("cd /u");
-//                        Log.d("talnet test", telnetUtils.sendCommand("ls -l"));
-//                         startActivity(intent2Menu);
+                        startActivity(intentConnect2Menu);
                     }
                     else{
                         toast.makeText(ConnectActivity.this,"连接失败",Toast.LENGTH_SHORT)

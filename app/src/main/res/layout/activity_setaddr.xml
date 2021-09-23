@@ -47,8 +47,8 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="接口eth0的mac地址"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_eth1_ipaddr" />
 
 
@@ -59,8 +59,8 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="接口eth1的mac地址"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_eth0_mac" />
 
     <CheckBox

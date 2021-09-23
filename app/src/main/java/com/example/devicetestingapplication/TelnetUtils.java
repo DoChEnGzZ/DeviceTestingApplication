@@ -1,6 +1,7 @@
 package com.example.devicetestingapplication;
 
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 
 import org.apache.commons.net.telnet.TelnetClient;
@@ -9,6 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+import android.os.Handler;
+
+import androidx.annotation.NonNull;
+
+import java.util.logging.LogRecord;
 
 public class TelnetUtils implements Serializable {
 
@@ -16,10 +22,29 @@ public class TelnetUtils implements Serializable {
     private LogIninfEntity logIninfEntity;
     private  Context context;
     private static final String prompt="#";
-    private static final int PORT=23;
+    private static final int PORT=2323;
     private InputStream inputStream;
     private PrintStream printStream;
+    private Status status;
+    private class mHandler extends Handler{
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    status=(Status) msg.obj;
+            }
+        }
+    }
+    private Handler handler;
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     /**
      * 构造函数
@@ -30,6 +55,8 @@ public class TelnetUtils implements Serializable {
         this.context=context;
         this.logIninfEntity = logIninfEntity;
         client=new TelnetClient();
+        handler=new mHandler();
+        status=new Status();
     }
 
     /**
@@ -38,6 +65,7 @@ public class TelnetUtils implements Serializable {
      */
     public boolean connect(){
         try {
+            client.setConnectTimeout(20000);
             client.connect(logIninfEntity.getIpaddr(),PORT);
             inputStream=client.getInputStream();
             printStream=new PrintStream(client.getOutputStream());
@@ -45,11 +73,13 @@ public class TelnetUtils implements Serializable {
                 write(logIninfEntity.getUsername());
                 write(logIninfEntity.getPasswd());
             } catch (Exception e) {
-                Log.d("LOGIN error",e.getMessage());
+                Log.d("LOGIN error ",e.getMessage());
                 return false;
             }
-            if(isConnected())
+            if(isConnected()) {
+                read("#");
                 return true;
+            }
             else
                 return false;
         } catch (IOException e) {
@@ -103,7 +133,8 @@ public class TelnetUtils implements Serializable {
      */
     public String sendCommand(String command){
         write(command);
-        return read(prompt);
+        String result=read(prompt+" ");
+        return result;
     }
 
     /**
@@ -121,6 +152,26 @@ public class TelnetUtils implements Serializable {
         return client.isConnected();
     }
 
+    public void UpdateStatus(){
+        Thread status_thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                status.setCPUusage(sendCommand("vmstat"));
+                status.setDiskusage(sendCommand("df"));
+                status.setMemoryusage(sendCommand("free | head -n 2"));
+                status.setVersion(sendCommand("more u/version"));
+//                Message message=handler.obtainMessage(1);
+//                message.obj=status;
+//                handler.sendMessage(message);
+            }
+        });
+        status_thread.start();
+        try {
+            status_thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

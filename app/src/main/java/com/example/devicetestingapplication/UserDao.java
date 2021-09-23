@@ -16,20 +16,26 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLogIninf(LogIninfEntity logIninfEntity);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAddress(AddressEntity addressEntity);
-
     @Query("delete from LogIninf")
     void deleteLogIninf();
 
-    @Query("delete from Address")
-    void deleteAddress();
 
     @Query("select * from LogIninf")
     LogIninfEntity queryLogIninf();
 
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAddress(AddressEntity addressEntity);
+
+    @Query("delete from Address")
+    void deleteAddress();
+
+
     @Query("select * from Address")
     List<AddressEntity> queryAddress();
+
+    @Query("select * from FileDir")
+    List<FileDirEntity> queryPardusDir();
 
 
 }

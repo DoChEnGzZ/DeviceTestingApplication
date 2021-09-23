@@ -2,35 +2,52 @@ package com.example.devicetestingapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.devicetestingapplication.ftpserver.FTPservice;
 
 public class MainActivity extends AppCompatActivity {
 
     private Intent intent;
+    private myApplication application;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
-        *todo1 : 读取数据库中的预存储信息
-        * 1. 上一次修改的ip地址、mac地址
-        * 2. 上一次读取的本地文件目录地址
-        * */
         intent=new Intent(this, MenuActivity.class);
         initviews();
-        startActivity(intent);
-//        btn_2connect.setOnClickListener(new View.OnClickListener() {
+        application=(myApplication)getApplication();
+        Log.d("ipaddr test: ",application.getIp());
+        application.setIpaddress(application.getIp());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            startForegroundService(new Intent(this,FTPservice.class));
+        }
+        else {
+            startService(new Intent(this,FTPservice.class));
+        }
+//        final Thread thread=new Thread(new Runnable() {
 //            @Override
-//            public void onClick(View v) {
-//                startActivity(intent);
+//            public void run() {
+//                SystemClock.sleep(3000);
 //            }
 //        });
-
+//        thread.start();
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        startActivity(intent);
     }
 
     private <T extends View> T f(int ViewID){
